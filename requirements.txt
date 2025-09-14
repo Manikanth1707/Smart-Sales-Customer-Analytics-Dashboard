@@ -1,0 +1,56 @@
+# Smart Sales Dashboard - Requirements
+
+## Prerequisites
+- Node.js (v14 or higher) - Download from https://nodejs.org/
+- Git (optional, for cloning) - Download from https://git-scm.com/
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+
+## Frontend Dependencies
+react@^18.2.0
+react-dom@^18.2.0
+react-scripts@5.0.1
+react-router-dom@^6.3.0
+recharts@^2.5.0
+axios@^0.27.2
+react-hook-form@^7.34.2
+react-hot-toast@^2.4.0
+lucide-react@^0.263.1
+date-fns@^2.29.1
+papaparse@^5.3.2
+xlsx@^0.18.5
+
+## Backend Dependencies
+express@^4.18.2
+cors@^2.8.5
+jsonwebtoken@^9.0.0
+bcryptjs@^2.4.3
+sqlite3@^5.1.6
+multer@^1.4.5-lts.1
+csv-parser@^3.0.0
+dotenv@^16.0.3
+
+## Development Dependencies
+tailwindcss@^3.1.8
+autoprefixer@^10.4.7
+postcss@^8.4.14
+nodemon@^2.0.22
+
+## Installation Commands
+npm install
+cd server && npm install
+
+## Start Commands
+# Backend
+cd server && node server.js
+
+# Frontend
+npm start
+
+## Access URLs
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+
+## Demo Accounts
+- Admin: admin@company.com / admin123
+- Employee: employee@company.com / employee123
+- Manager: manager@company.com / manager123
