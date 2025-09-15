@@ -61,6 +61,14 @@ export function DataProvider({ children }) {
     setSales(prev => prev.filter(sale => sale.id !== id));
   };
 
+  // Regenerate mock data
+  const regenerateMockData = () => {
+    const mockData = generateMockData();
+    setCustomers(mockData.customers);
+    setSales(mockData.sales);
+    setProducts(mockData.products);
+  };
+
   // Analytics data
   const getAnalyticsData = () => {
     const totalRevenue = sales.reduce((sum, sale) => sum + sale.amount, 0);
@@ -115,6 +123,7 @@ export function DataProvider({ children }) {
     addSale,
     updateSale,
     deleteSale,
+    regenerateMockData,
     getAnalyticsData
   };
 

@@ -36,6 +36,13 @@ export function generateMockData() {
     const totalSpent = Math.floor(Math.random() * 2000) + 100;
     const totalOrders = Math.floor(Math.random() * 20) + 1;
     
+    // Generate dates more evenly distributed across the last 365 days
+    const daysAgo = Math.floor(Math.random() * 365);
+    const hoursAgo = Math.floor(Math.random() * 24);
+    const createdAt = new Date();
+    createdAt.setDate(createdAt.getDate() - daysAgo);
+    createdAt.setHours(createdAt.getHours() - hoursAgo);
+    
     return {
       id: index + 1,
       name,
@@ -46,7 +53,7 @@ export function generateMockData() {
       totalSpent,
       totalOrders,
       status: Math.random() > 0.2 ? 'active' : 'inactive',
-      createdAt: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString()
+      createdAt: createdAt.toISOString()
     };
   });
 
@@ -59,6 +66,13 @@ export function generateMockData() {
     const unitPrice = Math.floor(Math.random() * 500) + 50;
     const amount = quantity * unitPrice;
     
+    // Generate dates more evenly distributed across the last 90 days
+    const daysAgo = Math.floor(Math.random() * 90);
+    const hoursAgo = Math.floor(Math.random() * 24);
+    const createdAt = new Date();
+    createdAt.setDate(createdAt.getDate() - daysAgo);
+    createdAt.setHours(createdAt.getHours() - hoursAgo);
+    
     sales.push({
       id: i + 1,
       customerId: customer.id,
@@ -68,7 +82,7 @@ export function generateMockData() {
       unitPrice,
       amount,
       status: Math.random() > 0.1 ? 'completed' : 'pending',
-      createdAt: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString()
+      createdAt: createdAt.toISOString()
     });
   }
 

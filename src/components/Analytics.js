@@ -25,7 +25,7 @@ import {
 } from 'recharts';
 
 const Analytics = () => {
-  const { getAnalyticsData, sales, customers } = useData();
+  const { getAnalyticsData, sales, customers, regenerateMockData } = useData();
   const [timeRange, setTimeRange] = useState('30');
   const analytics = getAnalyticsData();
 
@@ -46,23 +46,45 @@ const Analytics = () => {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
     
+    const filteredSales = sales.filter(sale => {
+      const saleDate = new Date(sale.createdAt);
+      return saleDate >= cutoffDate;
+    });
+    
+    const filteredCustomers = customers.filter(customer => {
+      const customerDate = new Date(customer.createdAt);
+      return customerDate >= cutoffDate;
+    });
+    
+    // Debug logging
+    console.log(`Time range: ${days} days`);
+    console.log(`Cutoff date: ${cutoffDate.toISOString()}`);
+    console.log(`Total sales: ${sales.length}, Filtered sales: ${filteredSales.length}`);
+    console.log(`Total customers: ${customers.length}, Filtered customers: ${filteredCustomers.length}`);
+    
     return {
-      sales: sales.filter(sale => new Date(sale.createdAt) >= cutoffDate),
-      customers: customers.filter(customer => new Date(customer.createdAt) >= cutoffDate)
+      sales: filteredSales,
+      customers: filteredCustomers
     };
   };
 
   const filteredData = getFilteredData();
 
-  // Calculate metrics for filtered data
-  const filteredRevenue = filteredData.sales.reduce((sum, sale) => sum + sale.amount, 0);
-  const filteredSalesCount = filteredData.sales.length;
-  const filteredCustomersCount = filteredData.customers.length;
+  // Use filtered data if available, otherwise use all data
+  const displayData = {
+    sales: filteredData.sales.length > 0 ? filteredData.sales : sales,
+    customers: filteredData.customers.length > 0 ? filteredData.customers : customers
+  };
+
+  // Calculate metrics for display data
+  const filteredRevenue = displayData.sales.reduce((sum, sale) => sum + sale.amount, 0);
+  const filteredSalesCount = displayData.sales.length;
+  const filteredCustomersCount = displayData.customers.length;
   const avgOrderValue = filteredSalesCount > 0 ? filteredRevenue / filteredSalesCount : 0;
 
   // Daily revenue data
   const dailyRevenue = {};
-  filteredData.sales.forEach(sale => {
+  displayData.sales.forEach(sale => {
     const date = new Date(sale.createdAt).toLocaleDateString('en-US', { 
       month: 'short', 
       day: 'numeric' 
@@ -76,7 +98,7 @@ const Analytics = () => {
 
   // Product performance
   const productPerformance = {};
-  filteredData.sales.forEach(sale => {
+  displayData.sales.forEach(sale => {
     if (!productPerformance[sale.product]) {
       productPerformance[sale.product] = { revenue: 0, quantity: 0, orders: 0 };
     }
@@ -96,7 +118,7 @@ const Analytics = () => {
 
   // Customer acquisition
   const customerAcquisition = {};
-  filteredData.customers.forEach(customer => {
+  displayData.customers.forEach(customer => {
     const date = new Date(customer.createdAt).toLocaleDateString('en-US', { 
       month: 'short', 
       day: 'numeric' 
@@ -109,7 +131,7 @@ const Analytics = () => {
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
   // Sales by status
-  const salesByStatus = filteredData.sales.reduce((acc, sale) => {
+  const salesByStatus = displayData.sales.reduce((acc, sale) => {
     acc[sale.status] = (acc[sale.status] || 0) + 1;
     return acc;
   }, {});
@@ -171,6 +193,12 @@ const Analytics = () => {
             <option value="90">Last 90 days</option>
             <option value="365">Last year</option>
           </select>
+          <button
+            onClick={regenerateMockData}
+            className="btn-primary text-sm"
+          >
+            Refresh Data
+          </button>
         </div>
       </div>
 
